@@ -2,17 +2,6 @@ from bs4 import BeautifulSoup
 import os
 import pandas as pd
 from jls_project import *
-# from jls_project import for_importing,required_location
-# from jls_project import user_requirements
-
-# required_role, required_location = user_requirements()
-# from jls_project import *
-# from jls_project import find_job_listings
-
-# required_location = os.getenv('required_location')
-# required_role = os.getenv('required_role')
-# print(required_location,required_role)
-
 
 dict = {"company" : [], "role" : [], "location" : [], "link" : []}
 
@@ -21,8 +10,6 @@ for file in os.listdir("jls_linkedin_database"):
         with open(f"jls_linkedin_database/{file}") as f:
             html_doc = f.read()
         soup = BeautifulSoup(html_doc, "html.parser")
-
-       
 
         c = soup.find("h4")
         company = c.get_text()
@@ -33,27 +20,9 @@ for file in os.listdir("jls_linkedin_database"):
         loc = soup.find("span", attrs={"class": "job-search-card__location"})
         location = loc.get_text()
 
-        
-        
-
-        # l = soup.find("div")
-        # print(l)
-        # link = l["href"]
-
-        # li = soup.find("li")
-        # for_l = soup.find("div", class_=["base-card", "relative"])
-        # print(for_l)
-        # for_l = soup.find("div", attrs={"class" : ["base-card", "relative"]})
-        # print(for_l)
-        # l = soup.find("a", attrs={"class" : "base-card__full-link"})
-        # print(l)
-        # l = soup.find("a")
-        # print(l)
-        # l = soup.find("a", attrs={"class" : "disabled ember-view job-card-container__link job-card-list__title job-card-list__title--link"})
         l = soup.find("a")
         link = l["href"]
         
-        # break
 
         if required_location.lower() in location.lower():
             dict["company"].append(company.strip())
