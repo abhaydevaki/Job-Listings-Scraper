@@ -13,7 +13,7 @@ file_no = 0
 no_of_elems = 0
 
 
-for _ in range(2):
+for _ in range(4):
     required_role_linkedin = required_role.replace(" ", "%20")
     driver.get(f"https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={required_role_linkedin}&origin=JOBS_HOME_SEARCH_BUTTON&refresh=true")
     time.sleep(4)
@@ -58,7 +58,7 @@ for _ in range(2):
 
 
 try:
-    for i in range(3):
+    for i in range(4):
         required_role_indeed = required_role.replace(" ", "+")
         driver.get(f"https://in.indeed.com/jobs?q={required_role_indeed}&l={required_location}&start={10*i}")
         time.sleep(5)
