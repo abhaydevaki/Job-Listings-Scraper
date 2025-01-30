@@ -5,15 +5,30 @@ import time
 from selenium.common.exceptions import NoSuchElementException
 import undetected_chromedriver as uc
 
-required_role = "python developer"
-required_location = "mumbai"
+required_role = input("What is the role you are looking for: ")
+required_location = input("What is the location you are looking for: ")
 
-driver = uc.Chrome()
+
+# Set up Chrome options
+options = uc.ChromeOptions()
+options.add_argument("--user-data-dir=C:\\Users\\abhay\\AppData\\Local\\Google\\Chrome\\User Data")  # Adjust path
+options.add_argument("--profile-directory=Profile 9")  # Change if needed
+options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
+options.add_argument("--start-maximized")  # Opens browser maximized
+# print(options)
+
+
+# Initialize undetected ChromeDriver
+driver = uc.Chrome(options=options)
+time.sleep(5)
+
+# The below code is to start the undetected chrome driver. This provides no login features.
+# driver = uc.Chrome()
+# The below code is to start the web chrome driver.This also provides no login features.
 # driver = webdriver.Chrome()
 
 file_no = 0
 no_of_elems = 0
-
 
 
 try:
@@ -107,8 +122,8 @@ except IndexError:
 #             file_no += 1
 #     break
 
-time.sleep(2)
-# print(f"{no_of_elems} found")
+# time.sleep(2)
+# # print(f"{no_of_elems} found")
 driver.close()
 
 
