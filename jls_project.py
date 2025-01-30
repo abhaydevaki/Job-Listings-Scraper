@@ -13,52 +13,9 @@ file_no = 0
 no_of_elems = 0
 
 
-for _ in range(4):
-    required_role_linkedin = required_role.replace(" ", "%20")
-    driver.get(f"https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={required_role_linkedin}&origin=JOBS_HOME_SEARCH_BUTTON&refresh=true")
-    time.sleep(4)
-
-    try:
-        element1 = driver.find_element(By.CLASS_NAME, "third-party-join__gsi-btn-container")
-    except NoSuchElementException:
-        element1 = None
-
-    try:
-        element2 = driver.find_element(By.CLASS_NAME, "google-auth-button__placeholder")
-    except NoSuchElementException:
-        element2 = None
-
-    if element1 or element2:
-        continue
-
-    driver.implicitly_wait(5)
-    for _ in range(6):
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(3)
-        driver.execute_script("window.scrollBy(500, 0);")
-        time.sleep(5)
-    driver.implicitly_wait(5)
-    more_button_linkedin = driver.find_element(By.CLASS_NAME, "infinite-scroller__show-more-button")
-    
-    for _ in range(5):
-        more_button_linkedin.click()
-        driver.execute_script("window.scrollBy(0, 1500);")
-        time.sleep(4)
-
-    elems = driver.find_elements(By.CLASS_NAME , "base-search-card__info")
-    no_of_elems += len(elems)
-
-    for elem in elems:
-        linkedin_data = elem.get_attribute("outerHTML")
-
-        with open(f"jls_linkedin_database/{required_role}_{file_no}.html", "w", encoding="utf-8") as f:
-            f.write(linkedin_data)
-            file_no += 1
-    break
-
 
 try:
-    for i in range(4):
+    for i in range(1):
         required_role_indeed = required_role.replace(" ", "+")
         driver.get(f"https://in.indeed.com/jobs?q={required_role_indeed}&l={required_location}&start={10*i}")
         time.sleep(5)
@@ -82,12 +39,12 @@ try:
     cross_button_indeed = driver.find_element(By.CLASS_NAME, "CloseButton")
     cross_button_indeed.click()
     
-    for _ in range(3):
+    for _ in range(5):
         time.sleep(5)
         more_button = driver.find_element(By.CSS_SELECTOR, '[data-test="load-more"]')
         more_button.click()
   
-    elems = driver.find_elements(By.CLASS_NAME, "JobCard_jobCardContent__X81Ew")
+    elems = driver.find_elements(By.CLASS_NAME, "JobCard_jobCardWrapper__vX29z")
     no_of_elems += len(elems)
 
     for elem in elems:
@@ -100,9 +57,56 @@ try:
 except IndexError:
     pass
 
+# for _ in range(4):
+#     required_role_linkedin = required_role.replace(" ", "%20")
+#     driver.get(f"https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={required_role_linkedin}&origin=JOBS_HOME_SEARCH_BUTTON&refresh=true")
+#     time.sleep(4)
+# # artdeco-icon lazy-loaded
+#     # try: 
+#     #     cross_button_linkedin = driver.find_element(By.CLASS_NAME, "modal__dismiss btn-tertiary h-[40px] w-[40px] p-0 rounded-full indent-0contextual-sign-in-modal__modal-dismiss absolute right-0 m-[20px] cursor-pointer")    
+#     #     cross_button_linkedin.click()
+#     # except NoSuchElementException:
+#     #     pass
+#     try:
+#         element1 = driver.find_element(By.CLASS_NAME, "third-party-join__gsi-btn-container")
+#     except NoSuchElementException:
+#         element1 = None
+
+#     try:
+#         element2 = driver.find_element(By.CLASS_NAME, "google-auth-button__placeholder")
+#     except NoSuchElementException:
+#         element2 = None
+
+#     if element1 or element2:
+#         continue
+
+#     driver.implicitly_wait(5)
+#     # for _ in range(6):
+#     #     driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+#     #     time.sleep(3)
+#     #     driver.execute_script("window.scrollBy(500, 0);")
+#     #     time.sleep(5)
+#     # driver.implicitly_wait(5)
+#     # more_button_linkedin = driver.find_element(By.CLASS_NAME, "infinite-scroller__show-more-button")
+    
+#     # for _ in range(5):
+#     #     more_button_linkedin.click()
+#     #     driver.execute_script("window.scrollBy(0, 1500);")
+#     #     time.sleep(4)
+
+#     elems = driver.find_elements(By.CLASS_NAME , "base-search-card__info")
+#     no_of_elems += len(elems)
+
+#     for elem in elems:
+#         linkedin_data = elem.get_attribute("outerHTML")
+
+#         with open(f"jls_linkedin_database/{required_role}_{file_no}.html", "w", encoding="utf-8") as f:
+#             f.write(linkedin_data)
+#             file_no += 1
+#     break
 
 time.sleep(2)
-print(f"{no_of_elems} found")
+# print(f"{no_of_elems} found")
 driver.close()
 
 
