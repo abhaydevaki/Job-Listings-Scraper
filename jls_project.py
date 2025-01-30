@@ -1,13 +1,15 @@
-from selenium import webdriver
+# from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
 from selenium.common.exceptions import NoSuchElementException
+import undetected_chromedriver as uc
 
-required_role = input("What is the role you are looking for: ")
-required_location = input("What is the location you are looking for: ")
+required_role = "python developer"
+required_location = "mumbai"
 
-driver = webdriver.Chrome()
+driver = uc.Chrome()
+# driver = webdriver.Chrome()
 
 file_no = 0
 no_of_elems = 0
@@ -15,9 +17,9 @@ no_of_elems = 0
 
 
 try:
-    for i in range(1):
+    for i in range(3):
         required_role_indeed = required_role.replace(" ", "+")
-        driver.get(f"https://in.indeed.com/jobs?q={required_role_indeed}&l={required_location}&start={10*i}")
+        driver.get(f"https://in.indeed.com/jobs?q={required_role_indeed}&l={required_location}&start={i*15}")
         time.sleep(5)
         elems = driver.find_elements(By.CLASS_NAME, "resultContent")
         no_of_elems += len(elems)
