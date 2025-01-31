@@ -5,36 +5,41 @@ from jls_project import *
 
 dict = {"company" : [], "role" : [], "location" : [], "link" : []}
 
-# for file in os.listdir("jls_linkedin_database"):
-#     try:
-#         with open(f"jls_linkedin_database/{file}") as f:
-#             html_doc = f.read()
-#         soup = BeautifulSoup(html_doc, "html.parser")
+# Linkedin
+for file in os.listdir("jls_linkedin_database"):
+    try:
+        with open(f"jls_linkedin_database/{file}") as f:
+            html_doc = f.read()
+        soup = BeautifulSoup(html_doc, "html.parser")
 
-#         c = soup.find("h4")
-#         company = c.get_text()
+        # Extract Company Name
+        c = soup.find("div", class_="artdeco-entity-lockup__subtitle")
+        company = c.get_text(strip=True)
 
-#         r = soup.find("h3")
-#         role = r.get_text()
+        # Extract Role
+        r = soup.find("a", class_="job-card-container__link").find("strong")
+        role = r.get_text(strip=True)
 
-#         loc = soup.find("span", attrs={"class": "job-search-card__location"})
-#         location = loc.get_text()
+        # Extract Location
+        loc = soup.find("div", class_="artdeco-entity-lockup__caption")
+        location = loc.find("span").get_text(strip=True)
 
-#         l = soup.find("a")
-#         link = l["href"]
+        # Extract Job URL
+        l = soup.find("a", class_="job-card-container__link")
+        link = "https://www.linkedin.com" + l["href"]
         
+        if required_location.lower() == "bangalore":
+            required_location = "bengaluru"
+        if required_location.lower() in location.lower():
+            dict["company"].append(company.strip())
+            dict["role"].append(role.strip())
+            dict["location"].append(location.strip())
+            dict["link"].append(link.strip())
+           
+    except Exception as e:
+        pass
 
-#         if required_location.lower() in location.lower():
-#             dict["company"].append(company.strip())
-#             dict["role"].append(role.strip())
-#             dict["location"].append(location.strip())
-#             dict["link"].append(link.strip())
-        
-    
-#     except Exception as e:
-#         print(e)
-#         pass
-
+# Indeed
 for file in os.listdir("jls_indeed_database"):
     try:
         with open(f"jls_indeed_database/{file}") as f:
@@ -43,6 +48,7 @@ for file in os.listdir("jls_indeed_database"):
 
         c = soup.find("span", attrs={"data-testid": "company-name"})
         company = c.get_text()
+
         # Extract job role
         r = soup.find("h2", attrs={"class": "jobTitle"})
         role = r.get_text()
@@ -54,18 +60,16 @@ for file in os.listdir("jls_indeed_database"):
         # Extract job link
         l = soup.find("a", attrs={"class": "jcs-JobTitle"})
         link = "https://in.indeed.com" + l["href"]
-        # print(link)
 
         dict["company"].append(company.strip())
         dict["role"].append(role.strip())
         dict["location"].append(location.strip())
         dict["link"].append(link.strip())
         
-    
     except Exception as e:
         pass
-        # print(e)
 
+# Glassdoor
 for file in os.listdir("jls_glassdoor_database"):
     try:
         with open(f"jls_glassdoor_database/{file}") as f:
@@ -76,6 +80,7 @@ for file in os.listdir("jls_glassdoor_database"):
         # Extract company name
         c = soup.find("span", class_="EmployerProfile_compactEmployerName__9MGcV")
         company = c.get_text(strip=True)
+
         # Extract job role
         r = soup.find("a", class_="JobCard_jobTitle__GLyJ1")
         role = r.get_text(strip=True)
@@ -94,10 +99,9 @@ for file in os.listdir("jls_glassdoor_database"):
             dict["location"].append(location)
             dict["link"].append(link)
         
-    
     except Exception as e:
         pass
-        # print(e)
+
 
 df = pd.DataFrame(data=dict)
 df.to_csv("jls_data.csv")
