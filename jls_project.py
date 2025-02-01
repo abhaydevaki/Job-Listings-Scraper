@@ -1,4 +1,3 @@
-# from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 import time
@@ -16,26 +15,22 @@ options.add_argument("--profile-directory=Profile 2")  # Change if needed
 options.add_argument("--disable-blink-features=AutomationControlled")  # Helps bypass detection
 options.add_argument("--start-maximized")  # Opens browser maximized
 
-
 # Initialize undetected ChromeDriver
 driver = uc.Chrome(options=options)
 time.sleep(5)
 
-# The below code is to start the undetected chrome driver. This provides no login features.
-# driver = uc.Chrome()
-# The below code is to start the web chrome driver.This also provides no login features.
-# driver = webdriver.Chrome()
 
 file_no = 0
 no_of_elems = 0
 
 
 # The below code is to get the data from LinkedIn.
-for _ in range(1):
-    required_role_linkedin = required_role.replace(" ", "%20")
-    driver.get(f"https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={required_role_linkedin}&origin=JOBS_HOME_SEARCH_BUTTON&refresh=true")
-    time.sleep(5)
+
+required_role_linkedin = required_role.replace(" ", "%20")
+driver.get(f"https://www.linkedin.com/jobs/search/?geoId=102713980&keywords={required_role_linkedin}&origin=JOBS_HOME_SEARCH_BUTTON&refresh=true")
+time.sleep(5)
     
+for _ in range(3):
     try:
         elems = driver.find_elements(By.CSS_SELECTOR, ".flex-grow-1.artdeco-entity-lockup__content.ember-view")
         no_of_elems += len(elems)
@@ -48,6 +43,10 @@ for _ in range(1):
         with open(f"jls_linkedin_database/{required_role}_{file_no}.html", "w", encoding="utf-8") as f:
             f.write(linkedin_data)
             file_no += 1
+
+    time.sleep(5)
+    next_button = driver.find_element(By.XPATH, "//button[@aria-label='View next page']")
+    next_button.click()
 
 
 # The below code is to get the data from Indeed.
